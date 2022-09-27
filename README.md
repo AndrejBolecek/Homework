@@ -1,8 +1,8 @@
 # Homework
 
-//bugs, where product behaves differently as the specification says and which are coverd by automated tests
+//bugs, where product behaves differently as the specification says, will be covered by automated tests
 
-bug 001: Password is evaluated as weak anytime
+bug_001: Password is evaluated as weak anytime
 ===================================================
 Steps to reproduce:
 go to https://reverent-aryabhata-11cf33.netlify.app/
@@ -15,7 +15,7 @@ there is message Password strength: weak anytime, no matter if the password met 
 expected result:
 proper message is shown according to the password policy rules
 
-bug 002: Phone field does not have phone number format validation
+bug_002: Phone field does not have phone number format validation
 =================================================================
 Steps to reproduce:
 go to https://reverent-aryabhata-11cf33.netlify.app/
@@ -32,7 +32,7 @@ only phone numbers in format: +380639992211 should be accepted
 
 //bugs, which are not agains the specification, but should be reported and fixed
 
-bug 003: Email address field does not have phone number format validation
+bug_003: Email address field does not have phone number format validation
 =========================================================================
 Steps to reproduce:
 go to https://reverent-aryabhata-11cf33.netlify.app/
@@ -47,7 +47,7 @@ any entry is accepted
 expected result:
 only email adress in valid format should be accepted
 
-bug 004: backend for the page is missing (page is probably for testing purposes only)
+bug_004: backend for the page is missing (page is probably for testing purposes only)
 =====================================================================================
 Steps to reproduce:
 go to https://reverent-aryabhata-11cf33.netlify.app/
@@ -66,3 +66,50 @@ expected result:
 email should be send
 singn up buttons are working
 futher validation on backend side (email duplicity validation, parword policy validation, other fielsd validation)
+
+======================================================================================================================
+
+test_001: happypath - fill all text field and click submit button - automated test shall pass
+result: redirect to welcome page
+
+test_002: fill all fields except Email address - automated test shall pass
+fill all fields except Email address
+click submit button
+result: no redirect welcome page
+visible error 'Field cannot be empty' next to item
+
+<!-- repeat for each textfield
+First name
+Last name
+Password
+Confirm password
+Phone
+Organization name -->
+
+test_003: passwords shall be same - automated test shall pass
+fill all fields except Password and Confirm password
+fill different password that inConfirm password field
+click submit button
+result: no redirect welcome page
+visible error 'Field cannot be empty' next to item
+
+test_004: weak password - automated test shall pass
+fill password and confirm password fields with password 'pass'
+result: visible message Password strength: weak
+
+test_005: normal password - automated test shall fail due to bug 001
+fill password and confirm password fields with password 'password1'
+result: visible message Password strength: normal
+
+test_005: strong password - automated test shall fail due to bug 001
+fill password and confirm password fields with password 'password_123'
+result: visible message Password strength: strong
+
+test_006: phone format - automated test shall fail due to bug 002
+fill password and confirm password fields with password 'password_123'
+result: visible message Password strength: strong
+
+fill all fields except Phone
+fill Phone textfill with 'this is not phone number'
+click submit button
+result: no redirect to welcome page
