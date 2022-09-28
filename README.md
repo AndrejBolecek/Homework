@@ -70,6 +70,7 @@ futher validation on backend side (email duplicity validation, parword policy va
 ======================================================================================================================
 
 test_001: happypath - fill all text field and click submit button - automated test shall pass
+fill all text field and click submit button
 result: redirect to welcome page
 
 test_002: fill all fields except Email address - automated test shall pass
@@ -106,9 +107,6 @@ fill password and confirm password fields with password 'password_123'
 result: visible message Password strength: strong
 
 test_006: phone format - automated test shall fail due to bug 002
-fill password and confirm password fields with password 'password_123'
-result: visible message Password strength: strong
-
 fill all fields except Phone
 fill Phone textfill with 'this is not phone number'
 click submit button
