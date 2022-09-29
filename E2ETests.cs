@@ -8,6 +8,21 @@ namespace Homework
     [Parallelizable(ParallelScope.Self)]
     public class Tests
     {
+        private bool Redirected(WebDriverWrapper wd)
+        {
+            try
+            {
+                // this element is available only on the firts page, so if it is found, you were not redirected and you are still there
+                wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return true;
+        }
+
         //Test_001: happy path - fill all text field and click submit button - automated test shall pass
         //fill all text field and click submit button
         //result: redirect to welcome page
@@ -18,48 +33,34 @@ namespace Homework
             using (var wd = new WebDriverWrapper())
             {
                 wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
-
-                var emailAdresss = wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
+                var atoms = new Atoms(wd.WebDriver);
+                var emailAdresss = atoms.emailAdresss;
                 emailAdresss.SendKeys("name.surname@domain.com");
 
-                var firstName = wd.WebDriver.FindElement(By.XPath("//div/input[@id='FirstName']"));
+                var firstName = atoms.firstName;
                 firstName.SendKeys("Name");
 
-                var lastName = wd.WebDriver.FindElement(By.XPath("//div/input[@id='LastName']"));
+                var lastName = atoms.lastName;
                 lastName.SendKeys("LastName");
 
-                var userPassword =
-                    wd.WebDriver.FindElement(
-                        By.XPath("//div[@class='input-control password'][1]/input[@id='UserPassword']"));
+                var userPassword = atoms.userPassword;
                 userPassword.SendKeys("password");
 
-                var confirmPassword =
-                    wd.WebDriver.FindElement(
-                        By.XPath("//div[@class='input-control password'][2]/input[@id='UserPassword']"));
+                var confirmPassword = atoms.confirmPassword;
                 confirmPassword.SendKeys("password");
 
-                var phone = wd.WebDriver.FindElement(By.XPath("//div/input[@id='Phone']"));
+                var phone = atoms.phone;
                 phone.SendKeys("+380639992211");
 
-                var organizationalname = wd.WebDriver.FindElement(By.XPath("//div/input[@id='OrgDisplayName']"));
+                var organizationalname = atoms.organizationalname;
                 organizationalname.SendKeys("Portnox");
 
-                var submitButton = wd.WebDriver.FindElement(By.XPath("//*[@id='signupbtn']"));
+                var submitButton = atoms.submitButton;
                 submitButton.Click();
 
-
                 //are you redirected?
-                var result = false;
-                try
-                {
-                    wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    Assert.Pass();
-                    result = true;
-                }
+                var result = Redirected(wd);
+
 
                 if (result == false)
                 {
@@ -68,6 +69,8 @@ namespace Homework
                 }
             }
         }
+
+
 
         //test_002: fill all fields except Email address - automated test shall pass
         //fill all fields except Email address
@@ -85,91 +88,236 @@ namespace Homework
 
                 //foreach (string textfield in textfields)
                 //    {
-                ;
-
-
 
                 wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                var atoms = new Atoms(wd.WebDriver);
 
-                var emailAdresss = wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
+                var emailAdresss = atoms.emailAdresss;
                 emailAdresss.SendKeys("");
 
-                var firstName = wd.WebDriver.FindElement(By.XPath("//div/input[@id='FirstName']"));
+                var firstName = atoms.firstName;
                 firstName.SendKeys("Name");
 
-                var lastName = wd.WebDriver.FindElement(By.XPath("//div/input[@id='LastName']"));
+                var lastName = atoms.lastName;
                 lastName.SendKeys("LastName");
 
-                var userPassword =
-                    wd.WebDriver.FindElement(
-                        By.XPath("//div[@class='input-control password'][1]/input[@id='UserPassword']"));
+                var userPassword = atoms.userPassword;
                 userPassword.SendKeys("password");
 
-                var confirmPassword =
-                    wd.WebDriver.FindElement(
-                        By.XPath("//div[@class='input-control password'][2]/input[@id='UserPassword']"));
+                var confirmPassword = atoms.confirmPassword;
                 confirmPassword.SendKeys("password");
 
-                var phone = wd.WebDriver.FindElement(By.XPath("//div/input[@id='Phone']"));
+                var phone = atoms.phone;
                 phone.SendKeys("+380639992211");
 
-                var organizationalname = wd.WebDriver.FindElement(By.XPath("//div/input[@id='OrgDisplayName']"));
+                var organizationalname = atoms.organizationalname;
                 organizationalname.SendKeys("Portnox");
 
-                var submitButton = wd.WebDriver.FindElement(By.XPath("//*[@id='signupbtn']"));
+                var submitButton = atoms.submitButton;
                 submitButton.Click();
 
 
-                //are you redirected?
-                var result = false;
-                try
+                //you should not be redirected
+                if (!Redirected(wd))
                 {
-                    wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
-                    //Is there error message
+                    //find error
                     try
                     {
-                        var error = wd.WebDriver.FindElement(By.XPath("//span[@for='UsernameOrEmail']"));
-        
-                        
-                        if (error.Text.Equals("Field cannot be empty"))
+                        var emailError = atoms.emailError;
+
+                        //check error
+                        if (!emailError.Text.Equals("Field cannot be empty"))
                         {
-                            result = true;
+                            Assert.Fail();
                         }
                     }
                     catch (Exception e)
                     {
-                        result = false;
+                        Assert.Fail();
                     }
-                   
-                }
-                catch (Exception e)
-                {
-               
-                    result = false;
-                }
-
-
-                if (result == false)
-                {
-                    Assert.Fail();
                 }
                 else
                 {
-                    Assert.Pass();
+                    Assert.Fail();
                 }
             }
         }
-        //public static bool redirected()
-        //{
-        //    try
-        //    {
-        //        wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
-        //        return false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return true; 
-        //    }
-        //}
+
+        //test_003: passwords shall be same - automated test shall pass
+        //fill all fields except Password and Confirm password
+        //fill password in Password field and different passwod in Confirm password field
+        //click submit button
+        //result: no redirect welcome page
+        //visible error 'Field cannot be empty' next to item
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public void Test_003()
+        {
+            using (var wd = new WebDriverWrapper())
+            {
+
+                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                var atoms = new Atoms(wd.WebDriver);
+
+                var emailAdresss = atoms.emailAdresss;
+                emailAdresss.SendKeys("name.surname@domain.com");
+
+                var firstName = atoms.firstName;
+                firstName.SendKeys("Name");
+
+                var lastName = atoms.lastName;
+                lastName.SendKeys("LastName");
+
+                var userPassword = atoms.userPassword;
+                userPassword.SendKeys("password");
+
+                var confirmPassword = atoms.confirmPassword;
+                confirmPassword.SendKeys("differentpassword");
+
+                var phone = atoms.phone;
+                phone.SendKeys("+380639992211");
+
+                var organizationalname = atoms.organizationalname;
+                organizationalname.SendKeys("Portnox");
+
+                var submitButton = atoms.submitButton;
+                submitButton.Click();
+
+                //you should not be redirected
+                if (!Redirected(wd))
+                {
+                    //find error
+                    try
+                    {
+                        var differentPasswordError = atoms.differentPasswordError;
+
+                        //check error
+                        if (!differentPasswordError.Text.Equals("The password and confirmation password do not match"))
+                        {
+                            Assert.Fail();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Assert.Fail();
+                    }
+                }
+                else
+                {
+                    Assert.Fail();
+                }
+
+
+            }
+        }
+
+        //    test_004a: weak password - automated test shall pass
+        //fill password and confirm password fields with password 'pass'
+        //result: visible message Password strength: weak
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public void Test_004a()
+        {
+            using (var wd = new WebDriverWrapper())
+            {
+
+
+                    wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                    var atoms = new Atoms(wd.WebDriver);
+
+                    var userPassword = atoms.userPassword;
+                    userPassword.SendKeys("pass");
+
+                        //find error
+                        try
+                        {
+                            var weakPasswordError = atoms.weakPasswordError;
+                            //check error
+                            if (!weakPasswordError.Text.Equals("Password strength: weak"))
+                            {
+                                Assert.Fail();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Assert.Fail();
+                        }
+            }
+        }
+
+        //    test_004b: normal password - automated test shall fail due to bug 001
+        //fill password and confirm password fields with password 'password1'
+        //result: visible message Password strength: normal
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public void Test_004b()
+        {
+            using (var wd = new WebDriverWrapper())
+            {
+
+
+                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                var atoms = new Atoms(wd.WebDriver);
+
+                var userPassword = atoms.userPassword;
+                userPassword.SendKeys("password1");
+
+                //find error
+                try
+                {
+                    var weakPasswordError = atoms.weakPasswordError;
+                    //check error
+                    if (!weakPasswordError.Text.Equals("Password strength: normal"))
+                    {
+                        Assert.Fail();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Assert.Fail();
+                }
+            }
+        }
+
+        //    test_004c: strong password - automated test shall fail due to bug 001
+        //fill password and confirm password fields with password 'password_123'
+        //result: visible message Password strength: strong
+
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public void Test_004c()
+        {
+            using (var wd = new WebDriverWrapper())
+            {
+
+
+                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                var atoms = new Atoms(wd.WebDriver);
+
+                var userPassword = atoms.userPassword;
+                userPassword.SendKeys("password_123");
+
+                //find error
+                try
+                {
+                    var weakPasswordError = atoms.weakPasswordError;
+                    //check error
+                    if (!weakPasswordError.Text.Equals("Password strength: strong"))
+                    {
+                        Assert.Fail();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Assert.Fail();
+                }
+            }
+        }
+
+        //    test_005: phone format - automated test shall fail due to bug 002
+        //fill all fields except Phone
+        //    fill Phone textfill with 'this is not phone number'
+        //click submit button
+        //    result: no redirect to welcome page
     }
 }

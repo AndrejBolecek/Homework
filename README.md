@@ -89,24 +89,24 @@ Organization name -->
 
 test_003: passwords shall be same - automated test shall pass
 fill all fields except Password and Confirm password
-fill different password that inConfirm password field
+fill password in Password field and different passwod in Confirm password field
 click submit button
 result: no redirect welcome page
 visible error 'Field cannot be empty' next to item
 
-test_004: weak password - automated test shall pass
+test_004a: weak password - automated test shall pass
 fill password and confirm password fields with password 'pass'
 result: visible message Password strength: weak
 
-test_005: normal password - automated test shall fail due to bug 001
+test_004b: normal password - automated test shall fail due to bug 001
 fill password and confirm password fields with password 'password1'
 result: visible message Password strength: normal
 
-test_005: strong password - automated test shall fail due to bug 001
+test_004c: strong password - automated test shall fail due to bug 001
 fill password and confirm password fields with password 'password_123'
 result: visible message Password strength: strong
 
-test_006: phone format - automated test shall fail due to bug 002
+test_005: phone format - automated test shall fail due to bug 002
 fill all fields except Phone
 fill Phone textfill with 'this is not phone number'
 click submit button
