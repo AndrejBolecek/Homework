@@ -20,6 +20,7 @@ namespace Homework
             {
                 Console.WriteLine(e);
             }
+
             return true;
         }
 
@@ -222,26 +223,26 @@ namespace Homework
             {
 
 
-                    wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
-                    var atoms = new Atoms(wd.WebDriver);
+                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                var atoms = new Atoms(wd.WebDriver);
 
-                    var userPassword = atoms.userPassword;
-                    userPassword.SendKeys("pass");
+                var userPassword = atoms.userPassword;
+                userPassword.SendKeys("pass");
 
-                        //find error
-                        try
-                        {
-                            var weakPasswordError = atoms.weakPasswordError;
-                            //check error
-                            if (!weakPasswordError.Text.Equals("Password strength: weak"))
-                            {
-                                Assert.Fail();
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Assert.Fail();
-                        }
+                //find error
+                try
+                {
+                    var weakPasswordError = atoms.weakPasswordError;
+                    //check error
+                    if (!weakPasswordError.Text.Equals("Password strength: weak"))
+                    {
+                        Assert.Fail();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Assert.Fail();
+                }
             }
         }
 
@@ -314,10 +315,51 @@ namespace Homework
             }
         }
 
-        //    test_005: phone format - automated test shall fail due to bug 002
+        //test_005: phone format - automated test shall fail due to bug 002
         //fill all fields except Phone
-        //    fill Phone textfill with 'this is not phone number'
+        //fill Phone textfield with 'this is not phone number'
         //click submit button
-        //    result: no redirect to welcome page
+        //result: no redirect to welcome page
+        [Test]
+        [Parallelizable(ParallelScope.Self)]
+        public void Test_005()
+        {
+            using (var wd = new WebDriverWrapper())
+            {
+                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                var atoms = new Atoms(wd.WebDriver);
+
+                var emailAdresss = atoms.emailAdresss;
+                emailAdresss.SendKeys("name.surname@domain.com");
+
+                var firstName = atoms.firstName;
+                firstName.SendKeys("Name");
+
+                var lastName = atoms.lastName;
+                lastName.SendKeys("LastName");
+
+                var userPassword = atoms.userPassword;
+                userPassword.SendKeys("password");
+
+                var confirmPassword = atoms.confirmPassword;
+                confirmPassword.SendKeys("password");
+
+                var phone = atoms.phone;
+                phone.SendKeys("this is not phone number");
+
+                var organizationalname = atoms.organizationalname;
+                organizationalname.SendKeys("Portnox");
+
+                var submitButton = atoms.submitButton;
+                submitButton.Click();
+
+
+                //you should not be redirected
+                if (Redirected(wd))
+                {
+                    Assert.Fail();
+                }
+            }
+        }
     }
 }

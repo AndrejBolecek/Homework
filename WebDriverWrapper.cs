@@ -7,11 +7,10 @@ namespace Homework
     internal class WebDriverWrapper : IDisposable
     {
         public IWebDriver WebDriver { get; }
-
         public WebDriverWrapper()
         {
             WebDriver = new ChromeDriver();
-            WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+            WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
         }
 
         public void Dispose()
