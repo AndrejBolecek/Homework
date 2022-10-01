@@ -108,6 +108,6 @@ result: visible message Password strength: strong
 
 test_005: phone format - automated test shall fail due to bug 002
 fill all fields except Phone
-fill Phone textfill with 'this is not phone number'
+fill Phone textfield with 'this is not phone number'
 click submit button
 result: no redirect to welcome page

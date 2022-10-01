@@ -8,17 +8,129 @@ namespace Homework
     [Parallelizable(ParallelScope.Self)]
     public class Tests
     {
+        /// <summary>
+        /// Method to open url https://reverent-aryabhata-11cf33.netlify.app/
+        /// </summary>
+        /// <param name="wd"></param>
+        private static void GoToRegPage(WebDriverWrapper wd)
+        {
+            wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+            Console.WriteLine("You are on Registration page");
+        }
+
+        /// <summary>
+        /// Method to enter Email address text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="email"></param>
+        private static void EnterEmail(Atoms atoms, string email)
+        {
+            var emailAdresss = atoms.emailAdresss;
+            emailAdresss.SendKeys(email);
+            Console.WriteLine("You entered email " + email);
+        }
+
+        /// <summary>
+        /// Method to enter First name text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="name"></param>
+        private static void EnterName(Atoms atoms, string name)
+        {
+            var firstName = atoms.firstName;
+            firstName.SendKeys(name);
+            Console.WriteLine("You entered name " + name);
+        }
+
+        /// <summary>
+        /// Method to enter Last name text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="name"></param>
+        private static void EnterLastName(Atoms atoms, string name)
+        {
+            var lastName = atoms.lastName;
+            lastName.SendKeys(name);
+            Console.WriteLine("You entered last name " + name);
+        }
+
+        /// <summary>
+        /// Method to enter Password text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="password"></param>
+        private static void EnterPassword(Atoms atoms, string password)
+        {
+            var userPassword = atoms.userPassword;
+            userPassword.SendKeys(password);
+            Console.WriteLine("You entered password " + password);
+        }
+
+        /// <summary>
+        /// Method to enter Confirm password text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="password"></param>
+        private static void ConfirmPassword(Atoms atoms, string password)
+        {
+            var confirmPassword = atoms.confirmPassword;
+            confirmPassword.SendKeys(password);
+            Console.WriteLine("You confirmed password " + password);
+        }
+
+        /// <summary>
+        /// Method to enter Phone text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="phoneNumber"></param>
+        private static void EnterPhone(Atoms atoms, string phoneNumber)
+        {
+            var phone = atoms.phone;
+            phone.SendKeys(phoneNumber);
+            Console.WriteLine("You entered phone number " + phoneNumber);
+        }
+
+        /// <summary>
+        /// Method to enter Organization name text field
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="organization"></param>
+        private static void EnterOrganizationName(Atoms atoms, string organization)
+        {
+            var organizationalname = atoms.organizationalname;
+            organizationalname.SendKeys(organization);
+            Console.WriteLine("You entered company name " + organization);
+        }
+
+        /// <summary>
+        /// Method to click the Submit button
+        /// </summary>
+        /// <param name="atoms"></param>
+        private static void ClickSubmitButton(Atoms atoms)
+        {
+            var submitButton = atoms.submitButton;
+            submitButton.Click();
+            Console.WriteLine("You clicked Submit button");
+        }
+
+        /// <summary>
+        /// Method to check if you were redirected to Welcome page
+        /// </summary>
+        /// <param name="wd">webdriver</param>
+        /// <returns></returns>
         private bool Redirected(WebDriverWrapper wd)
         {
             try
             {
-                // this element is available only on the firts page, so if it is found, you were not redirected and you are still there
+                // this element is available only on the first page, so if it is found,
+                // you were not redirected and you are still on Registration page
                 wd.WebDriver.FindElement(By.XPath("//div/input[@id='registerName']"));
+                Console.WriteLine("You were NOT redirected to Welcome page");
                 return false;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine("You are on Welcome page"); ;
             }
 
             return true;
@@ -33,31 +145,25 @@ namespace Homework
         {
             using (var wd = new WebDriverWrapper())
             {
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                GoToRegPage(wd);
+
                 var atoms = new Atoms(wd.WebDriver);
-                var emailAdresss = atoms.emailAdresss;
-                emailAdresss.SendKeys("name.surname@domain.com");
 
-                var firstName = atoms.firstName;
-                firstName.SendKeys("Name");
+                EnterEmail(atoms, "name.surname@domain.com");
 
-                var lastName = atoms.lastName;
-                lastName.SendKeys("LastName");
+                EnterName(atoms, "Name");
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("password");
+                EnterLastName(atoms, "LastName");
 
-                var confirmPassword = atoms.confirmPassword;
-                confirmPassword.SendKeys("password");
+                EnterPassword(atoms, "password");
 
-                var phone = atoms.phone;
-                phone.SendKeys("+380639992211");
+                ConfirmPassword(atoms, "password");
 
-                var organizationalname = atoms.organizationalname;
-                organizationalname.SendKeys("Portnox");
+                EnterPhone(atoms, "+380639992211");
 
-                var submitButton = atoms.submitButton;
-                submitButton.Click();
+                EnterOrganizationName(atoms, "Portnox");
+
+                ClickSubmitButton(atoms);
 
                 //are you redirected?
                 var result = Redirected(wd);
@@ -71,8 +177,6 @@ namespace Homework
             }
         }
 
-
-
         //test_002: fill all fields except Email address - automated test shall pass
         //fill all fields except Email address
         //click submit button
@@ -85,38 +189,25 @@ namespace Homework
             using (var wd = new WebDriverWrapper())
             {
 
-                //string[] textfields = { "Email address", "First name", "Last name", "Password", "Confirm password", "Phone", "Organization name" };
+                GoToRegPage(wd);
 
-                //foreach (string textfield in textfields)
-                //    {
-
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
                 var atoms = new Atoms(wd.WebDriver);
 
-                var emailAdresss = atoms.emailAdresss;
-                emailAdresss.SendKeys("");
+                EnterEmail(atoms, "");
 
-                var firstName = atoms.firstName;
-                firstName.SendKeys("Name");
+                EnterName(atoms, "Name");
 
-                var lastName = atoms.lastName;
-                lastName.SendKeys("LastName");
+                EnterLastName(atoms, "LastName");
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("password");
+                EnterPassword(atoms, "password");
 
-                var confirmPassword = atoms.confirmPassword;
-                confirmPassword.SendKeys("password");
+                ConfirmPassword(atoms, "password");
 
-                var phone = atoms.phone;
-                phone.SendKeys("+380639992211");
+                EnterPhone(atoms, "+380639992211");
 
-                var organizationalname = atoms.organizationalname;
-                organizationalname.SendKeys("Portnox");
+                EnterOrganizationName(atoms, "Portnox");
 
-                var submitButton = atoms.submitButton;
-                submitButton.Click();
-
+                ClickSubmitButton(atoms);
 
                 //you should not be redirected
                 if (!Redirected(wd))
@@ -157,32 +248,25 @@ namespace Homework
             using (var wd = new WebDriverWrapper())
             {
 
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                GoToRegPage(wd);
+
                 var atoms = new Atoms(wd.WebDriver);
 
-                var emailAdresss = atoms.emailAdresss;
-                emailAdresss.SendKeys("name.surname@domain.com");
+                EnterEmail(atoms, "name.surname@domain.com");
 
-                var firstName = atoms.firstName;
-                firstName.SendKeys("Name");
+                EnterName(atoms, "Name");
 
-                var lastName = atoms.lastName;
-                lastName.SendKeys("LastName");
+                EnterLastName(atoms, "LastName");
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("password");
+                EnterPassword(atoms, "password");
 
-                var confirmPassword = atoms.confirmPassword;
-                confirmPassword.SendKeys("differentpassword");
+                ConfirmPassword(atoms, "differentpassword");
 
-                var phone = atoms.phone;
-                phone.SendKeys("+380639992211");
+                EnterPhone(atoms, "+380639992211");
 
-                var organizationalname = atoms.organizationalname;
-                organizationalname.SendKeys("Portnox");
+                EnterOrganizationName(atoms, "Portnox");
 
-                var submitButton = atoms.submitButton;
-                submitButton.Click();
+                ClickSubmitButton(atoms);
 
                 //you should not be redirected
                 if (!Redirected(wd))
@@ -222,12 +306,11 @@ namespace Homework
             using (var wd = new WebDriverWrapper())
             {
 
+                GoToRegPage(wd);
 
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
                 var atoms = new Atoms(wd.WebDriver);
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("pass");
+                EnterPassword(atoms, "pass");
 
                 //find error
                 try
@@ -256,12 +339,11 @@ namespace Homework
             using (var wd = new WebDriverWrapper())
             {
 
+                GoToRegPage(wd);
 
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
                 var atoms = new Atoms(wd.WebDriver);
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("password1");
+                EnterPassword(atoms, "password1");
 
                 //find error
                 try
@@ -291,12 +373,11 @@ namespace Homework
             using (var wd = new WebDriverWrapper())
             {
 
+                GoToRegPage(wd);
 
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
                 var atoms = new Atoms(wd.WebDriver);
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("password_123");
+                EnterPassword(atoms, "password_123");
 
                 //find error
                 try
@@ -326,33 +407,25 @@ namespace Homework
         {
             using (var wd = new WebDriverWrapper())
             {
-                wd.WebDriver.Navigate().GoToUrl("https://reverent-aryabhata-11cf33.netlify.app/");
+                GoToRegPage(wd);
+
                 var atoms = new Atoms(wd.WebDriver);
 
-                var emailAdresss = atoms.emailAdresss;
-                emailAdresss.SendKeys("name.surname@domain.com");
+                EnterEmail(atoms, "name.surname@domain.com");
 
-                var firstName = atoms.firstName;
-                firstName.SendKeys("Name");
+                EnterName(atoms, "Name");
 
-                var lastName = atoms.lastName;
-                lastName.SendKeys("LastName");
+                EnterLastName(atoms, "LastName");
 
-                var userPassword = atoms.userPassword;
-                userPassword.SendKeys("password");
+                EnterPassword(atoms, "password");
 
-                var confirmPassword = atoms.confirmPassword;
-                confirmPassword.SendKeys("password");
+                ConfirmPassword(atoms, "password");
 
-                var phone = atoms.phone;
-                phone.SendKeys("this is not phone number");
+                EnterPhone(atoms, "this is not phone number");
 
-                var organizationalname = atoms.organizationalname;
-                organizationalname.SendKeys("Portnox");
+                EnterOrganizationName(atoms, "Portnox");
 
-                var submitButton = atoms.submitButton;
-                submitButton.Click();
-
+                ClickSubmitButton(atoms);
 
                 //you should not be redirected
                 if (Redirected(wd))
