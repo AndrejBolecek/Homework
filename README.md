@@ -4,7 +4,7 @@ Table of Contents
 
 - [BUGS](#BUGS)
 - [TESTS](#TESTS)
-- [SETUP_ENVIRONMENT](#STETUP_ENVIRONMENT)
+- [SETUP_ENVIRONMENT](#SETUP_ENVIRONMENT)
 - [TESTS_EXECUTION](#TESTS_EXECUTION)
 
 ## BUGS
@@ -169,7 +169,7 @@ RESULT:
 * Install `Java` for Allure report and set JAVA_HOME variable
 * Install `scoop` and `allure` you can execute script `allure_install.ps1`
 
-## TESTS EXECUTION
+## TESTS_EXECUTION
 
 * execute `run_test_xml_result.ps1` for pure ugly XML result
 
