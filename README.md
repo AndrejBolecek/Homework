@@ -4,7 +4,8 @@ Table of Contents
 
 - [BUGS](#BUGS)
 - [TESTS](#TESTS)
-
+- [STETUP_ENVIRONMENT](#STETUP_ENVIRONMENT)
+- [TESTS_EXECUTION](#TESTS_EXECUTION)
 
 ## BUGS
 
@@ -86,6 +87,7 @@ expected result:
 * You entered phone number "+380639992211"
 * You entered company name "Portnox"
 * You clicked Submit button
+
 RESULT:
 * You are on Welcome page
 
@@ -100,6 +102,7 @@ RESULT:
 * You entered phone number "+380639992211"
 * You entered company name "Portnox"
 * You clicked Submit button
+
 RESULT:
 * You were NOT redirected to Welcome page
 * "Field cannot be empty" error appeared
@@ -115,6 +118,7 @@ RESULT:
 * You entered phone number "+380639992211"
 * You entered company name "Portnox"
 * You clicked Submit button
+
 RESULT:
 * You were NOT redirected to Welcome page
 * "The password and confirmation password do not match" error appeared
@@ -123,6 +127,7 @@ RESULT:
 
 * You are on Registration page
 * You entered password "pass"
+
 RESULT:
 * "Password strength: weak" message appeared
 
@@ -130,6 +135,7 @@ RESULT:
 
 * You are on Registration page
 * You entered password "password1"
+
 RESULT:
 * "Password strength: normal" message appeared
 
@@ -137,6 +143,7 @@ RESULT:
 
 * You are on Registration page
 * You entered password "password_123"
+
 RESULT:
 *  "Password strength: strong" message appeared
 
@@ -151,11 +158,12 @@ RESULT:
 * You entered phone number "this is not phone number"
 * You entered company name "Portnox"
 * You clicked Submit button
+
 RESULT:
 * You were not regirected
 * Error "Wrong phone numer format" appeared
 
-## STETUP ENVIRONMENT
+## STETUP_ENVIRONMENT
 
 * Install `Google Chrome` as solution supports chrome browser only
 * Install `Java` for Allure report and set JAVA_HOME variable
@@ -164,5 +172,6 @@ RESULT:
 ## TESTS EXECUTION
 
 * execute `run_test_xml_result.ps1` for pure ugly XML result
+
 OR
 * execute `run_test_allure_result.ps1` to see test result in Allure dashboard
