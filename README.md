@@ -4,7 +4,7 @@ Table of Contents
 
 - [BUGS](#BUGS)
 - [TESTS](#TESTS)
-- [STETUP_ENVIRONMENT](#STETUP_ENVIRONMENT)
+- [SETUP_ENVIRONMENT](#STETUP_ENVIRONMENT)
 - [TESTS_EXECUTION](#TESTS_EXECUTION)
 
 ## BUGS
@@ -163,7 +163,7 @@ RESULT:
 * You were not regirected
 * Error "Wrong phone numer format" appeared
 
-## STETUP_ENVIRONMENT
+## SETUP_ENVIRONMENT
 
 * Install `Google Chrome` as solution supports chrome browser only
 * Install `Java` for Allure report and set JAVA_HOME variable
