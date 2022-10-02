@@ -27,7 +27,7 @@ namespace Homework
         {
             var emailAdresss = atoms.emailAdresss;
             emailAdresss.SendKeys(email);
-            Console.WriteLine("You entered email " + email);
+            Console.WriteLine("You entered email \"{0}\"",email );
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Homework
         {
             var firstName = atoms.firstName;
             firstName.SendKeys(name);
-            Console.WriteLine("You entered name " + name);
+            Console.WriteLine("You entered name \"{0}\"", name);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Homework
         {
             var lastName = atoms.lastName;
             lastName.SendKeys(name);
-            Console.WriteLine("You entered last name " + name);
+            Console.WriteLine("You entered last name \"{0}\"", name);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Homework
         {
             var userPassword = atoms.userPassword;
             userPassword.SendKeys(password);
-            Console.WriteLine("You entered password " + password);
+            Console.WriteLine("You entered password \"{0}\"", password);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Homework
         {
             var confirmPassword = atoms.confirmPassword;
             confirmPassword.SendKeys(password);
-            Console.WriteLine("You confirmed password " + password);
+            Console.WriteLine("You confirmed password \"{0}\"", password);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Homework
         {
             var phone = atoms.phone;
             phone.SendKeys(phoneNumber);
-            Console.WriteLine("You entered phone number " + phoneNumber);
+            Console.WriteLine("You entered phone number \"{0}\"", phoneNumber);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Homework
         {
             var organizationalname = atoms.organizationalname;
             organizationalname.SendKeys(organization);
-            Console.WriteLine("You entered company name " + organization);
+            Console.WriteLine("You entered company name \"{0}\"", organization);
         }
 
         /// <summary>
@@ -136,12 +136,32 @@ namespace Homework
             return true;
         }
 
+        /// <summary>
+        /// Method that compare found error wit text in "errorText" parameter
+        /// </summary>
+        /// <param name="atoms"></param>
+        /// <param name="errorAtom"></param>
+        /// <param name="errorText"></param>
+        private static void CheckError(Atoms atoms, IWebElement errorAtom, string errorText)
+        {
+            //check error
+                if (errorText != null && !errorAtom.Text.Equals(errorText))
+                {
+                    Console.WriteLine("Error message should be \"{0}\", but it is \"{1}\"", errorText, errorAtom.Text);
+                    Assert.Fail("Error message should be \"{0}\", but it is \"{1}\"", errorText, errorAtom.Text);
+                }
+                else
+                {
+                    Console.WriteLine("\"{0}\" error appeared", errorText);
+                }
+        }
+
         //Test_001: happy path - fill all text field and click submit button - automated test shall pass
         //fill all text field and click submit button
         //result: redirect to welcome page
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_001()
+        public void Test_001_happypath()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -165,13 +185,15 @@ namespace Homework
 
                 ClickSubmitButton(atoms);
 
+                Console.WriteLine("RESULT:");
+
                 //are you redirected?
                 var result = Redirected(wd);
 
 
                 if (result == false)
                 {
-                    Assert.Fail();
+                    Assert.Fail("You were NOT redirected to Welcome page");
 
                 }
             }
@@ -184,7 +206,7 @@ namespace Homework
         //visible error 'Field cannot be empty' next to item
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_002()
+        public void Test_002_email_address_empty()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -209,28 +231,24 @@ namespace Homework
 
                 ClickSubmitButton(atoms);
 
+                Console.WriteLine("RESULT:");
+
                 //you should not be redirected
                 if (!Redirected(wd))
                 {
-                    //find error
                     try
                     {
-                        var emailError = atoms.emailError;
-
-                        //check error
-                        if (!emailError.Text.Equals("Field cannot be empty"))
-                        {
-                            Assert.Fail();
-                        }
+                        CheckError(atoms, atoms.emailError, "Field cannot be empty");
                     }
-                    catch (Exception e)
+                    catch (NoSuchElementException e)
                     {
-                        Assert.Fail();
+                        Console.WriteLine(e);
+                        Assert.Fail("\"{0}\" error was not found", atoms.emailError.Text);
                     }
                 }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail("You were redirected to welcome page");
                 }
             }
         }
@@ -243,7 +261,7 @@ namespace Homework
         //visible error 'Field cannot be empty' next to item
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_003()
+        public void Test_003_Passwords_do_not_match()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -268,28 +286,25 @@ namespace Homework
 
                 ClickSubmitButton(atoms);
 
+                Console.WriteLine("RESULT:");
+
                 //you should not be redirected
                 if (!Redirected(wd))
                 {
                     //find error
                     try
                     {
-                        var differentPasswordError = atoms.differentPasswordError;
-
-                        //check error
-                        if (!differentPasswordError.Text.Equals("The password and confirmation password do not match"))
-                        {
-                            Assert.Fail();
-                        }
+                        CheckError(atoms, atoms.differentPasswordError, "The password and confirmation password do not match");
                     }
-                    catch (Exception e)
+                    catch (NoSuchElementException e)
                     {
-                        Assert.Fail();
+                        Console.WriteLine(e);
+                        Assert.Fail("\"{0}\" error was not found", atoms.differentPasswordError.Text);
                     }
                 }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail("You were redirected to welcome page");
                 }
 
 
@@ -301,7 +316,7 @@ namespace Homework
         //result: visible message Password strength: weak
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_004a()
+        public void Test_004a_Password_weak()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -312,19 +327,17 @@ namespace Homework
 
                 EnterPassword(atoms, "pass");
 
+                Console.WriteLine("RESULT:");
+
                 //find error
                 try
                 {
-                    var weakPasswordError = atoms.weakPasswordError;
-                    //check error
-                    if (!weakPasswordError.Text.Equals("Password strength: weak"))
-                    {
-                        Assert.Fail();
-                    }
+                    CheckError(atoms, atoms.weakPasswordError, "Password strength: weak");
                 }
-                catch (Exception e)
+                catch (NoSuchElementException)
                 {
-                    Assert.Fail();
+                    Console.WriteLine("\"Password strength: weak\" message was not found");
+                    Assert.Fail("\"Password strength: weak\" messagewas not found");
                 }
             }
         }
@@ -334,7 +347,7 @@ namespace Homework
         //result: visible message Password strength: normal
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_004b()
+        public void Test_004b_password_normal()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -345,19 +358,17 @@ namespace Homework
 
                 EnterPassword(atoms, "password1");
 
+                Console.WriteLine("RESULT:");
+
                 //find error
                 try
                 {
-                    var weakPasswordError = atoms.weakPasswordError;
-                    //check error
-                    if (!weakPasswordError.Text.Equals("Password strength: normal"))
-                    {
-                        Assert.Fail();
-                    }
+                    CheckError(atoms, atoms.weakPasswordError, "Password strength: normal");
                 }
-                catch (Exception e)
+                catch (NoSuchElementException)
                 {
-                    Assert.Fail();
+                    Console.WriteLine("\"Password strength: normal\" message not found");
+                    Assert.Fail("\"Password strength: normal\" message was not found");
                 }
             }
         }
@@ -368,7 +379,7 @@ namespace Homework
 
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_004c()
+        public void Test_004c_password_strong()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -379,19 +390,17 @@ namespace Homework
 
                 EnterPassword(atoms, "password_123");
 
+                Console.WriteLine("RESULT:");
+
                 //find error
                 try
                 {
-                    var weakPasswordError = atoms.weakPasswordError;
-                    //check error
-                    if (!weakPasswordError.Text.Equals("Password strength: strong"))
-                    {
-                        Assert.Fail();
-                    }
+                    CheckError(atoms, atoms.weakPasswordError, "Password strength: strong");
                 }
-                catch (Exception e)
+                catch (NoSuchElementException)
                 {
-                    Assert.Fail();
+                    Console.WriteLine("\"Password strength: strong\" message not found");
+                    Assert.Fail("\"Password strength: strongl\" message was not found");
                 }
             }
         }
@@ -403,7 +412,7 @@ namespace Homework
         //result: no redirect to welcome page
         [Test]
         [Parallelizable(ParallelScope.Self)]
-        public void Test_005()
+        public void Test_005_invalid_phone_number()
         {
             using (var wd = new WebDriverWrapper())
             {
@@ -427,10 +436,12 @@ namespace Homework
 
                 ClickSubmitButton(atoms);
 
+                Console.WriteLine("RESULT:");
+
                 //you should not be redirected
                 if (Redirected(wd))
                 {
-                    Assert.Fail();
+                    Assert.Fail("You were redirected to Welcome page but you shouldn't be");
                 }
             }
         }
