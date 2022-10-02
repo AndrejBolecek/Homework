@@ -168,6 +168,7 @@ RESULT:
 * Install `Google Chrome` as solution supports chrome browser only
 * Install `Java` for Allure report and set JAVA_HOME variable
 * Install `scoop` and `allure` you can execute script `allure_install.ps1`
+* Checkout this repo and build the solution
 
 ## TESTS_EXECUTION
 
