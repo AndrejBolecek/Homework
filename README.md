@@ -1,113 +1,168 @@
-# Homework
+# HOMEWORK
 
-//bugs, where product behaves differently as the specification says, will be covered by automated tests
+Table of Contents
 
-bug_001: Password is evaluated as weak anytime
-===================================================
+- [BUGS](#BUGS)
+- [TESTS](#TESTS)
+
+
+## BUGS
+
+*bugs, where product behaves differently as the specification says, will be covered by automated tests*
+
+### bug_001: Password is evaluated as weak anytime
+
 Steps to reproduce:
-go to https://reverent-aryabhata-11cf33.netlify.app/
-go to Password textfield
-enter any password you want
+* go to [https://reverent-aryabhata-11cf33.netlify.app/](https://reverent-aryabhata-11cf33.netlify.app/)
+* go to Password textfield
+* enter any password you want
 
 actual result:
-there is message Password strength: weak anytime, no matter if the password met password policy
+* there is message Password strength: weak anytime, no matter if the password met password policy
 
 expected result:
-proper message is shown according to the password policy rules
+* proper message is shown according to the password policy rules
 
-bug_002: Phone field does not have phone number format validation
-=================================================================
+### bug_002: Phone field does not have phone number format validation
 Steps to reproduce:
-go to https://reverent-aryabhata-11cf33.netlify.app/
-go to Phone text field
-enter anything you want
-put some character to the other fields
-click the submit button
+* go to [https://reverent-aryabhata-11cf33.netlify.app/](https://reverent-aryabhata-11cf33.netlify.app/)
+* go to Phone text field
+* enter anything you want
+* put some character to the other fields
+* click the submit button
 
 actual result:
-any entry is accepted 
+* any entry is accepted 
 
 expected result:
-only phone numbers in format: +380639992211 should be accepted
+* only phone numbers in format: +380639992211 should be accepted
 
-//bugs, which are not agains the specification, but should be reported and fixed
 
-bug_003: Email address field does not have phone number format validation
-=========================================================================
+*bugs, which are not agains the specification, but should be reported and fixed*
+
+### bug_003: Email address field does not have phone number format validation
 Steps to reproduce:
-go to https://reverent-aryabhata-11cf33.netlify.app/
-go to Email address text field
-enter anything you want
-put some character to the other fields
-click the submit button
+* go to [https://reverent-aryabhata-11cf33.netlify.app/](https://reverent-aryabhata-11cf33.netlify.app/)
+* go to Email address text field
+* enter anything you want
+* put some character to the other fields
+* click the submit button
 
 actual result:
-any entry is accepted 
+* any entry is accepted 
 
 expected result:
-only email adress in valid format should be accepted
+* only email adress in valid format should be accepted
 
-bug_004: backend for the page is missing (page is probably for testing purposes only)
-=====================================================================================
+### bug_004: backend for the page is missing (page is probably for testing purposes only)
 Steps to reproduce:
-go to https://reverent-aryabhata-11cf33.netlify.app/
-go to Email address text field
-enter valid emali address
-put some character to the other fields
-click the submit button
+* go to [https://reverent-aryabhata-11cf33.netlify.app/](https://reverent-aryabhata-11cf33.netlify.app/)
+* go to Email address text field
+* enter valid emali address
+* put some character to the other fields
+* click the submit button
 
 actual result:
-no email arived
-there is just redirection to another page
-sing up buttons should work
-no other
+* no email arived
+* there is just redirection to another page
+* sing up buttons should work
+* no other
 
 expected result:
-email should be send
-singn up buttons are working
-futher validation on backend side (email duplicity validation, parword policy validation, other fielsd validation)
+* email should be send
+* singn up buttons are working
+* futher validation on backend side (email duplicity validation, parword policy validation, other fielsd validation)
 
-======================================================================================================================
+## TESTS
 
-test_001: happypath - fill all text field and click submit button - automated test shall pass
-fill all text field and click submit button
-result: redirect to welcome page
+### test_001: happypath - fill all text field and click submit button *- automated test shall pass*
 
-test_002: fill all fields except Email address - automated test shall pass
-fill all fields except Email address
-click submit button
-result: no redirect welcome page
-visible error 'Field cannot be empty' next to item
+* You are on Registration page
+* You entered email "name.surname@domain.com"
+* You entered name "Name"
+* You entered last name "LastName"
+* You entered password "password"
+* You confirmed password "password"
+* You entered phone number "+380639992211"
+* You entered company name "Portnox"
+* You clicked Submit button
+RESULT:
+* You are on Welcome page
 
-<!-- repeat for each textfield
-First name
-Last name
-Password
-Confirm password
-Phone
-Organization name -->
+### test_002: email address empty *- automated test shall pass*
 
-test_003: passwords shall be same - automated test shall pass
-fill all fields except Password and Confirm password
-fill password in Password field and different passwod in Confirm password field
-click submit button
-result: no redirect welcome page
-visible error 'Field cannot be empty' next to item
+* You are on Registration page
+* You entered email ""
+* You entered name "Name"
+* You entered last name "LastName"
+* You entered password "password"
+* You confirmed password "password"
+* You entered phone number "+380639992211"
+* You entered company name "Portnox"
+* You clicked Submit button
+RESULT:
+* You were NOT redirected to Welcome page
+* "Field cannot be empty" error appeared
 
-test_004a: weak password - automated test shall pass
-fill password and confirm password fields with password 'pass'
-result: visible message Password strength: weak
+### test_003: Passwords do not match *- automated test shall pass*
 
-test_004b: normal password - automated test shall fail due to bug 001
-fill password and confirm password fields with password 'password1'
-result: visible message Password strength: normal
+* You are on Registration page
+* You entered email "name.surname@domain.com"
+* You entered name "Name"
+* You entered last name "LastName"
+* You entered password "password"
+* You confirmed password "differentpassword"
+* You entered phone number "+380639992211"
+* You entered company name "Portnox"
+* You clicked Submit button
+RESULT:
+* You were NOT redirected to Welcome page
+* "The password and confirmation password do not match" error appeared
 
-test_004c: strong password - automated test shall fail due to bug 001
-fill password and confirm password fields with password 'password_123'
-result: visible message Password strength: strong
+### test_004a: Password weak *- automated test shall pass*
 
-test_005: phone format - automated test shall fail due to bug 002
-fill all fields except Phone
-fill Phone textfield with 'this is not phone number'
-click submit button
-result: no redirect to welcome page
+* You are on Registration page
+* You entered password "pass"
+RESULT:
+* "Password strength: weak" message appeared
+
+### test_004b: Password normal *- automated test shall fail due to bug 001*
+
+* You are on Registration page
+* You entered password "password1"
+RESULT:
+* "Password strength: normal" message appeared
+
+### test_004c: Password strong *- automated test shall fail due to bug 001*
+
+* You are on Registration page
+* You entered password "password_123"
+RESULT:
+*  "Password strength: strong" message appeared
+
+### test_005: invalid phone number *- automated test shall fail due to bug 002*
+
+* You are on Registration page
+* You entered email "name.surname@domain.com"
+* You entered name "Name"
+* You entered last name "LastName"
+* You entered password "password"
+* You confirmed password "password"
+* You entered phone number "this is not phone number"
+* You entered company name "Portnox"
+* You clicked Submit button
+RESULT:
+* You were not regirected
+* Error "Wrong phone numer format" appeared
+
+## STETUP ENVIRONMENT
+
+* Install `Google Chrome` as solution supports chrome browser only
+* Install `Java` for Allure report and set JAVA_HOME variable
+* Install `scoop` and `allure` you can execute script `allure_install.ps1`
+
+## TESTS EXECUTION
+
+* execute `run_test_xml_result.ps1` for pure ugly XML result
+OR
+* execute `run_test_allure_result.ps1` to see test result in Allure dashboard
