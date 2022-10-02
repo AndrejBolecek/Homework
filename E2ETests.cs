@@ -1,10 +1,15 @@
 ﻿using System;
+using Allure.Commons;
+using NUnit.Allure.Attributes;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
 namespace Homework
 {
     [TestFixture]
+    [AllureNUnit]
+    [AllureSuite("Homework")]
     [Parallelizable(ParallelScope.Self)]
     public class Tests
     {
